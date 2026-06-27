@@ -25,7 +25,8 @@
       text-align: center;
       padding: 20px;
       max-width: 800px;
-      margin: 20px auto 120px auto;
+      /* Zmniejszony dolny margines ze 120px na 40px, bo nie ma już przypiętego paska sponsorów */
+      margin: 20px auto 40px auto;
       background-color: #f7f7f7;
       border: 1px solid #ddd;
       border-radius: 10px;
@@ -62,17 +63,6 @@
       transform: translateY(-2px);
     }
 
-    .sponsorzy {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      padding: 15px;
-      background-color: #fff;
-      border-top: 1px solid #ddd;
-    }
-
     table {
       border-collapse: collapse;
       width: 100%;
@@ -93,19 +83,21 @@
     tr:nth-child(even) {
       background-color: #f2f2f2;
     }
-/* Dla telefonów */
-@media (max-width: 768px) {
-  .header img, .sponsorzy img {
-    width: 90vw; /* Zwiększone z 80vw - zajmie prawie całą szerokość ekranu */
-  }
-}
 
-/* Dla komputerów */
-@media (min-width: 769px) {
-  .header img, .sponsorzy img {
-    width: 600px; /* Zwiększone z 300px - możesz wpisać dowolną liczbę pikseli */
-  }
-}  </style>
+    /* Dla telefonów */
+    @media (max-width: 768px) {
+      .header img {
+        width: 90vw;
+      }
+    }
+
+    /* Dla komputerów */
+    @media (min-width: 769px) {
+      .header img {
+        width: 600px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -116,80 +108,10 @@
   <div class="search-container">
     <p>Wprowadź nazwę gry, której szukasz:</p>
     <input type="text" id="searchTerm" placeholder="np. Catan, Turbo, Wsiąść do Pociągu...">
-   
 
     <div id="results"></div>
   </div>
 
-  <div class="sponsorzy">
-    <img src="logo-sponsorzy.png" alt=" ">
-  </div>
-
 <script>
     var inputField = document.getElementById("searchTerm");
-    var scriptURL = "https://script.google.com/macros/s/AKfycbwz2w4xCDmQ4yCA6h2E0I1V4XEKZavj-F03cXuQHiomcio82YFmPxqLPiNzuu_CTsDS/exec";
-    
-    var timeout = null;
-
-    // 1. Obsługa przycisku Szukaj - USUNIĘTO (przycisk nie istnieje w HTML)
-
-    // 2. Obsługa wyszukiwania na żywo (z opóźnieniem 600ms)
-    inputField.addEventListener("input", function() {
-      clearTimeout(timeout);
-      var searchTerm = inputField.value.trim();
-      
-      timeout = setTimeout(function() {
-          search(searchTerm);
-      }, 600); 
-    });
-
-    // 3. Główna funkcja pobierająca dane
-    function search(term) {
-      var resultsDiv = document.getElementById("results");
-      
-      fetch(scriptURL + "?search=" + encodeURIComponent(term))
-        .then(response => {
-          if (!response.ok) throw new Error('Błąd sieci');
-          return response.json();
-        })
-        .then(data => displayResults(data))
-        .catch(error => {
-          console.error("Błąd:", error);
-          resultsDiv.innerHTML = "<p style='color:red;'>Błąd połączenia z bazą danych.</p>";
-        });
-    }
-
-    // 4. Funkcja budująca tabelę z wynikami
-    function displayResults(results) {
-      var resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "";
-
-      if (results && results.length > 0) {
-        var tableHTML = "<table><thead><tr><th>Nazwa Gry</th><th>Status</th></tr></thead><tbody>";
-
-        for (var i = 0; i < results.length; i++) {
-          var status = results[i][1] || "Brak danych";
-          tableHTML += "<tr><td>" + results[i][0] + "</td><td>" + status + "</td></tr>";
-        }
-
-        tableHTML += "</tbody></table>";
-        resultsDiv.innerHTML = tableHTML;
-      } else {
-        resultsDiv.innerHTML = "<p style='margin-top:20px;'>Brak pasujących gier w bibliotece.</p>";
-      }
-    }
-
-    // 5. Ładowanie wszystkich gier na start
-    document.addEventListener("DOMContentLoaded", function() {
-      document.title = "GRAciarnia 2026";
-      search(""); 
-    });
-</script>
-
-</body>
-</html>
-
-
-
-
-
+    var scriptURL = "
